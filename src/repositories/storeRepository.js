@@ -83,6 +83,15 @@ const storeRepository = {
       throw error;
     }
   },
+  async findStoreByOwnerId(ownerId) {
+    try {
+      const store = await Store.findOne({ where: { ownerId } });
+      return store;
+    } catch (error) {
+      console.error("Error in storeRepository.findStoreByOwnerId:", error);
+      throw error;
+    }
+  },
 };
 
 module.exports = storeRepository;

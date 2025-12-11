@@ -30,6 +30,26 @@ const storeController ={
             // Use 500 for internal server errors
             res.status(500).json({ error: "Failed to fetch stores" });
         }
+    },
+    async getOwnerDashboard(req, res) {
+    try {
+      const ownerId = req.user.id;
+      if (req.user.role !== 'store_owner') {
+          return res.status(403).json({ error: "Access denied. Only Store Owners can view this dashboard." });
+      }
+
+      const dashboardData = await storeService.getOwnerDashboard(ownerId);
+      res.status(200).json({
+        message: "Store Owner dashboard data fetched successfully",
+        data: dashboardData
+      });
+    } catch (error) {
+      console.error("Error in storeController.getOwnerDashboard:", error);
+      if (error.message === "Store not found for this owner.") {
+          return res.status(404).json({ error: error.message });
+      }    
+      res.status(500).json({ error: "Failed to fetch dashboard data" });
     }
+  },
 };
 module.exports = storeController;

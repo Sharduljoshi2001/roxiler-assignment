@@ -1,4 +1,4 @@
-const { Rating, sequelize } = require("../models");
+const { Rating, sequelize, User } = require("../models");
 const ratingRepository = {
   async createRating(ratingData, transaction) {
     try {
@@ -36,6 +36,22 @@ const ratingRepository = {
       return countRatings;
     } catch (error) {
       console.log("Error in ratingRepository.countAll:", error);
+      throw error;
+    }
+  },
+  async getRatingsByStoreId(storeId) {
+    try {
+      const ratings = await Rating.findAll({
+        where: { storeId: storeId },
+        include: {
+          model: User, // Join with User table
+          attributes: ['id', 'name', 'email'] // Sirf ye fields chahiye, password nahi
+        },
+        order: [['createdAt', 'DESC']] // Latest rating upar
+      });
+      return ratings;
+    } catch (error) {
+      console.error("Error in ratingRepository.getRatingsByStoreId:", error);
       throw error;
     }
   },
