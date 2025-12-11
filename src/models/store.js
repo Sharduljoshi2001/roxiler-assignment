@@ -13,19 +13,32 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+            len: [3, 100]
+        }
       },
       email: {
         type: DataTypes.STRING,
+        unique:true,
         allowNull: false,
         validate: {
             isEmail: true
         }
       },
       address: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(400),
         allowNull: false,
         validate: {
-            len: [0, 400]
+            len: [10, 400]
+        }
+      },
+      rating:{
+        type:DataTypes.DECIMAL(3,2),
+        allowNull:false,
+        defaultValue:0.00,
+        validate:{
+          min:0.00,
+          max:5.00
         }
       },
       ownerId: {

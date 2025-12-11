@@ -19,5 +19,20 @@ const userRepository = {
       throw error;
     }
   },
+  async findOwnerById(ownerId) {
+    try{
+      const owner = await User.findOne(
+        {
+          where:{
+            id:ownerId,
+          }
+        }
+      );
+      return owner;
+    }catch(error){
+      console.log("Error in userRepository.findOwnerById:", error);
+      throw error;
+    }
+  },
 };
 module.exports = userRepository;

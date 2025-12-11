@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require("express");
+//importing essential routes below
 const userRoutes = require("./routes/userRoutes");
+const storeRoutes = require("./routes/storeRoutes"); 
 const { sequelize } = require("./models");
 const app = express();
 const PORT = 3001;
@@ -8,6 +10,7 @@ const PORT = 3001;
 //middleware to pass the json data kyunki express can't read jso data itself
 app.use(express.json());
 app.use('/api/users', userRoutes);
+app.use('/api/stores', storeRoutes); 
 //test routes
 app.get('/',(req, res) => {
   res.send("Server is running");

@@ -11,10 +11,14 @@ const userService = {
       }
 
       const hashedPassword = await bcrypt.hash(userData.password, 10);
-      const newUser = await userRepository.createUser({
+      const safeUserData = {
         ...userData,
         password: hashedPassword,
-      });
+        // client se jo bhi role aaye, use overwrite karke normal_user set kar dege
+        role: "normal_user",
+      };
+
+      const newUser = await userRepository.createUser(safeUserData);
       delete newUser.dataValues.password;
       return newUser;
     } catch (error) {
