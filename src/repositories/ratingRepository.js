@@ -29,5 +29,15 @@ const ratingRepository = {
       throw error;
     }
   },
+  //method to count ratings
+  async countAll() {
+    try {
+      const countRatings = await Rating.count();
+      return countRatings;
+    } catch (error) {
+      console.log("Error in ratingRepository.countAll:", error);
+      throw error;
+    }
+  },
 };
 module.exports = ratingRepository;

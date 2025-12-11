@@ -73,6 +73,16 @@ const storeRepository = {
       throw error;
     }
   },
+  //method to count total stores
+  async countAll() {
+    try {
+      const countStores = await Store.count();
+      return countStores;
+    } catch (error) {
+      console.log("Error in storeRepository.countAll:", error);
+      throw error;
+    }
+  },
 };
 
 module.exports = storeRepository;

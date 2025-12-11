@@ -34,5 +34,14 @@ const userRepository = {
       throw error;
     }
   },
+  async countAll(){
+    try{
+      const countUsers = await User.count();
+      return countUsers;
+    }catch(error){
+      console.log("Error in userRepository.countAll:", error);
+      throw error;
+    }
+  },
 };
 module.exports = userRepository;

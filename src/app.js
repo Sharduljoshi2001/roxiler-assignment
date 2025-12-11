@@ -4,6 +4,7 @@ const express = require("express");
 const userRoutes = require("./routes/userRoutes");
 const storeRoutes = require("./routes/storeRoutes"); 
 const ratingRoutes = require("./routes/ratingRoutes"); 
+const adminRoutes = require("./routes/adminRoutes");
 const { sequelize } = require("./models");
 const app = express();
 const PORT = 3001;
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/stores', storeRoutes); 
 app.use('/api/ratings', ratingRoutes); 
+app.use('/api/admin', adminRoutes);
 //test routes
 app.get('/',(req, res) => {
   res.send("Server is running");
