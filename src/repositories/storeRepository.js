@@ -32,6 +32,23 @@ const storeRepository = {
       throw error;
     }
   },
+  async updateStoreRating(storeId, newAverage, transaction){
+    try{
+      const result = await Store.update(
+        {
+          rating:newAverage
+        },
+        {
+          where:{id:storeId},
+          transaction:transaction
+        }
+      )
+      return result;
+    }catch(error){
+      console.log("Error in storeRepository.updateStoreRating:", error);
+      throw error;
+    }
+  },
 
 };
 
