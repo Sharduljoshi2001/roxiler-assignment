@@ -15,9 +15,12 @@ const storeController ={
             });
         }
     },
+    //method to get all stores with filters(search & sort)
     async getAllStores(req,res){
         try{
-            const stores = await storeService.getAllStores(); // Correctly call the function
+            const {search, sortBy, sortOrder} = req.query;
+            const filterParams ={search, sortBy, sortOrder};
+            const stores = await storeService.getAllStores(filterParams); 
             res.status(200).json({
                 message:"Stores fetched successfully",
                 stores:stores

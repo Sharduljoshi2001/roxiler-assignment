@@ -1,4 +1,5 @@
 const { Store, User } = require("../models");
+const { Op, Model } = require("sequelize");
 const storeRepository = {
   async createStore(storeData) {
     try {
@@ -18,38 +19,60 @@ const storeRepository = {
       throw error;
     }
   },
-  async findAllStores(){
-    try{
-      const stores = await Store.findAll({
+  async findAllStores(filterParams = {}) {
+    try {
+      const queryOptions = {
         include: {
           model: User,
-          attributes: ['id', 'name', 'email']
-        }
-      });
+          attributes: ["id", "name", "email"],
+        },
+      };
+      //searching logic below
+      if (filterParams.search) {
+        queryOptions.where = {
+          [Op.or]: [
+            //(Case Insensitive due to iLike)
+            { name: { [Op.iLike]: `%${filterParams.search}%` } },
+            // YA FIR Address mein dhoondhege
+            { address: { [Op.iLike]: `%${filterParams.search}%` } },
+          ],
+        };
+      }
+      //sorting logic below
+      if (filterParams.sortBy) {
+        const direction =
+          filterParams.sortOrder &&
+          filterParams.sortOrder.toUpperCase() === "DESC"
+            ? "DESC"
+            : "ASC";
+        queryOptions.order = [[filterParams.sortBy, direction]];
+      } else {
+        queryOptions.order = [["id", "ASC"]];
+      }
+      const stores = await Store.findAll(queryOptions);
       return stores;
-    }catch(error){
+    } catch (error) {
       console.log("Error in storeRepository.findAllStores:", error);
       throw error;
     }
   },
-  async updateStoreRating(storeId, newAverage, transaction){
-    try{
+  async updateStoreRating(storeId, newAverage, transaction) {
+    try {
       const result = await Store.update(
         {
-          rating:newAverage
+          rating: newAverage,
         },
         {
-          where:{id:storeId},
-          transaction:transaction
+          where: { id: storeId },
+          transaction: transaction,
         }
-      )
+      );
       return result;
-    }catch(error){
+    } catch (error) {
       console.log("Error in storeRepository.updateStoreRating:", error);
       throw error;
     }
   },
-
 };
 
 module.exports = storeRepository;

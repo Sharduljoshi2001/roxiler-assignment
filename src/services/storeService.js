@@ -19,10 +19,10 @@ const storeService ={
             throw error;
         }
     },
-    async getAllStores() {
+    async getAllStores(filterParams) {
     try {
       // repository ko call krke result return kr dege
-      const stores = await storeRepository.findAllStores();
+      const stores = await storeRepository.findAllStores(filterParams);
       return stores;
     } catch (error) {
       console.error("Error in storeService.getAllStores:", error);
