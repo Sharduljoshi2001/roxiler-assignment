@@ -36,5 +36,19 @@ const adminController = {
       res.status(500).json({ error: "Failed to create user" });
     }
   },
+  async getAllUsers(req, res) {
+    try {
+      const { search, orderBy, role } = req.query;
+      const filterParams = { search, orderBy, role };
+      const users = await adminService.getAllUsers(filterParams);
+      res.status(200).json({
+        message: "Users fetched successfully",
+        users: users,
+      });
+    } catch (error) {
+      console.error("Error in adminController.getAllUsers:", error);
+      res.status(500).json({ error: "Failed to fetch users" });
+    }
+  },
 };
 module.exports = adminController;

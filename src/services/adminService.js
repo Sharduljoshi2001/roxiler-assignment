@@ -58,5 +58,14 @@ const adminService = {
       throw error;
     }
   },
+  async getAllUsers(filterParams={}){
+    try{
+      const users = await userRepository.findAllUsers(filterParams);
+      return users;
+    }catch(error){
+      console.error("Error in adminService.getAllUsers:", error);
+      throw error;
+    }
+  },
 };
 module.exports = adminService;

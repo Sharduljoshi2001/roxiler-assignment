@@ -15,4 +15,10 @@ router.post(
   authorizeRole(["system_admin"]),
   adminController.createUser
 );
+router.get(
+  "/users",
+  verifyToken,
+  authorizeRole(["system_admin"]),
+  adminController.getAllUsers
+);
 module.exports = router;

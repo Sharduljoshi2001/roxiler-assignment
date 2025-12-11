@@ -1,4 +1,5 @@
 const { User } = require("../models");
+const { Op } = require("sequelize");
 const userRepository = {
   async createUser(userData) {
     try {
@@ -20,26 +21,57 @@ const userRepository = {
     }
   },
   async findOwnerById(ownerId) {
-    try{
-      const owner = await User.findOne(
-        {
-          where:{
-            id:ownerId,
-          }
-        }
-      );
+    try {
+      const owner = await User.findOne({
+        where: {
+          id: ownerId,
+        },
+      });
       return owner;
-    }catch(error){
+    } catch (error) {
       console.log("Error in userRepository.findOwnerById:", error);
       throw error;
     }
   },
-  async countAll(){
-    try{
+  async countAll() {
+    try {
       const countUsers = await User.count();
       return countUsers;
-    }catch(error){
+    } catch (error) {
       console.log("Error in userRepository.countAll:", error);
+      throw error;
+    }
+  },
+  async findAllUsers(filterParams = {}) {
+    try {
+      // password excluded(security measure)
+      const queryOptions = {
+        attributes: { exclude: ["password"] },
+        where: {},
+      };
+
+      // generic search logic (name, email, address)
+      if (filterParams.search) {
+        queryOptions.where[Op.or] = [
+          { name: { [Op.iLike]: `%${filterParams.search}%` } },
+          { email: { [Op.iLike]: `%${filterParams.search}%` } },
+          { address: { [Op.iLike]: `%${filterParams.search}%` } },
+        ];
+      }
+
+      // specific role filter (if admin asks for store_owners only)
+      if (filterParams.role) {
+        // Jo pehle se where condition hai, usme role bhi jod do (AND logic)
+        queryOptions.where.role = filterParams.role;
+      }
+
+      // sorting (optional-so we can show the newest first)
+      queryOptions.order = [["createdAt", "DESC"]];
+
+      const users = await User.findAll(queryOptions);
+      return users;
+    } catch (error) {
+      console.error("Error in userRepository.findAllUsers:", error);
       throw error;
     }
   },
