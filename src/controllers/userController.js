@@ -54,5 +54,33 @@ const userController = {
       res.status(500).json({ error: "Login failed", details: error.message });
     }
   },
+  async changePassword(req, res) {
+    try {
+      const userId = req.user.id;
+      const { currentPassword, newPassword } = req.body;
+      if (!currentPassword || !newPassword) {
+        return res
+          .status(400)
+          .json({ error: "Both current and new passwords are required" });
+      }
+      const updatedPassword = await userService.changePassword(
+        userId,
+        currentPassword,
+        newPassword
+      );
+      res.status(200).json({
+        message: "Password updated successfully",
+        updatedPassword: updatedPassword,
+      });
+    } catch (error) {
+      console.error("Error updating password:", error);
+      if (error.message === "Incorrect current password") {
+        return res.status(400).json({ error: error.message });
+      }
+      res.status(500).json({
+        error: "Password update failed",
+      });
+    }
+  },
 };
 module.exports = userController;

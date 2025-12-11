@@ -20,6 +20,15 @@ const userRepository = {
       throw error;
     }
   },
+  async findUserById(id) {
+    try {
+      const user = await User.findByPk(id);
+      return user;
+    } catch (error) {
+      console.error("Error in userRepository.findUserById:", error);
+      throw error;
+    }
+  },
   async findOwnerById(ownerId) {
     try {
       const owner = await User.findOne({
@@ -74,6 +83,24 @@ const userRepository = {
       return users;
     } catch (error) {
       console.error("Error in userRepository.findAllUsers:", error);
+      throw error;
+    }
+  },
+  async updatePassword(userId, newHashedPassword) {
+    try {
+      const newPassword = await User.update(
+        {
+          password: newHashedPassword,
+        },
+        {
+          where: {
+            id: userId,
+          },
+        }
+      );
+      return newPassword;
+    } catch (error) {
+      console.error("Error in userRepository.updatePassword:", error);
       throw error;
     }
   },

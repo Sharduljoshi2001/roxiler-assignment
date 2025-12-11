@@ -51,5 +51,23 @@ const userService = {
       throw error;
     }
   },
+async changePassword(userId, currentPassword, newPassword) {
+    try {
+      const user = await userRepository.findUserById(userId);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) {
+        throw new Error("Incorrect current password");
+      }
+      const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+      await userRepository.updatePassword(userId, hashedNewPassword);
+      return { message: "Password updated successfully" };
+    } catch (error) {
+      console.error("Error in userService.changePassword:", error);
+      throw error;
+    }
+  },
 };
 module.exports = userService;
