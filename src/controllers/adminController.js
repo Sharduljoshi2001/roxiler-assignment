@@ -14,6 +14,27 @@ const adminController = {
       });
     }
   },
+  //fn for admin to create a user
+  async createUser(req, res) {
+    try {
+      const { name, email, password, address, role } = req.body;
+      const validRoles = ["system_admin", "store_owner", "normal_user"];
+      if (role && !validRoles.includes(role)) {
+        return res.status(400).json({ error: "Invalid role specified" });
+      }
+      const userData = { name, email, password, address, role };
+      const newUser = await adminService.createUser(userData);
+      res.status(201).json({
+        message: "User created successfully",
+        user: newUser,
+      });
+    } catch (error) {
+      console.error("Error in adminController.createUser:", error);
+      if (error.message === "Email already exists") {
+        return res.status(400).json({ error: error.message });
+      }
+      res.status(500).json({ error: "Failed to create user" });
+    }
+  },
 };
 module.exports = adminController;
-
