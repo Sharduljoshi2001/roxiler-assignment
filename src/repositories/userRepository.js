@@ -64,10 +64,12 @@ const userRepository = {
         // Jo pehle se where condition hai, usme role bhi jod do (AND logic)
         queryOptions.where.role = filterParams.role;
       }
-
       // sorting (optional-so we can show the newest first)
-      queryOptions.order = [["createdAt", "DESC"]];
-
+      if (filterParams.orderBy) {
+        queryOptions.order = [[filterParams.orderBy, "ASC"]];
+      } else {
+        queryOptions.order = [["createdAt", "DESC"]];
+      }
       const users = await User.findAll(queryOptions);
       return users;
     } catch (error) {
