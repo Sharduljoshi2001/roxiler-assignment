@@ -11,4 +11,11 @@ router.post(
   handleValidationErrors,    
   ratingController.addRating
 );
+router.put(
+  '/', 
+  verifyToken, 
+  validateRating,             
+  handleValidationErrors,    
+  ratingController.modifyRating 
+);
 module.exports = router;

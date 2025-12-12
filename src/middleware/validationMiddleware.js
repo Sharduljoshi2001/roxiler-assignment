@@ -53,7 +53,7 @@ const validateRating = [
         .notEmpty().withMessage('Store ID is required.')
         .isInt({ min: 1 }).withMessage('Store ID must be a positive integer.'),
     
-    body('value')
+    body('rating')
         .notEmpty().withMessage('Rating value is required.')
         .isInt({ min: 1, max: 5 }).withMessage('Rating value must be between 1 and 5.'),
 ];

@@ -55,5 +55,36 @@ const ratingRepository = {
       throw error;
     }
   },
+  async findRatingByStoreAndUser(storeId, userId) {
+    try {
+      const rating = await Rating.findOne({ 
+        where: { storeId, userId } 
+      });
+      return rating;
+    } catch (error) {
+      console.error("Error in ratingRepository.findRatingByStoreAndUser:", error);
+      throw error;
+    }
+  },
+  async updateRating(ratingId, newValue, newComment, transaction) {
+    try {
+      const updateData = { value: newValue };
+      if (newComment !== undefined) {
+          updateData.comment = newComment;
+      }
+      
+      const result = await Rating.update(
+        updateData,
+        {
+          where: { id: ratingId },
+          transaction: transaction,
+        }
+      );
+      return result;
+    } catch (error) {
+      console.error("Error in ratingRepository.updateRating:", error);
+      throw error;
+    }
+  },
 };
 module.exports = ratingRepository;

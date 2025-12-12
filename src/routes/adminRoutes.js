@@ -2,7 +2,7 @@ const { verifyToken } = require("../middleware/authMiddleware");
 const authorizeRole = require("../middleware/authorizeRole");
 const adminController = require("../controllers/adminController");
 const express = require("express");
-const { validateUserFields, handleValidationErrors } = require('../middleware/validationMiddleware'); // <-- NEW IMPORT
+const { validateUserFields, handleValidationErrors } = require('../middleware/validationMiddleware'); 
 const router = express.Router();
 // admin dashboard stats route
 router.get(
