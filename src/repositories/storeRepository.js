@@ -3,6 +3,7 @@ const { Op, Model } = require("sequelize");
 const storeRepository = {
   async createStore(storeData) {
     try {
+      console.log("storeData:", storeData);
       const newStore = await Store.create(storeData);
       return newStore;
     } catch (error) {

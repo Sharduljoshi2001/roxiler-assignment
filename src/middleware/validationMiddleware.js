@@ -58,13 +58,14 @@ const validateRating = [
         .isInt({ min: 1, max: 5 }).withMessage('Rating value must be between 1 and 5.'),
 ];
 const handleValidationErrors = (req, res, next) => {
+  
     const errors = validationResult(req);
     if (errors.isEmpty()) {
         return next();
     }
 
     const extractedErrors = errors.array().map(err => err.msg);
-
+   
     return res.status(400).json({
         error: 'Validation failed',
         details: extractedErrors
